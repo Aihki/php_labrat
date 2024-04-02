@@ -1,8 +1,6 @@
 <?php
 global $DBH;
-
-require 'dbConnect.php';
-
+require_once 'dbConnect.php';
 
 $sql = 'SELECT * FROM MediaItems;';
 
@@ -19,6 +17,10 @@ try {
         echo '<td>' . $row['title'] . '</td>';
         echo '<td>' . $row['description'] . '</td>';
         echo '<td>' . $row['created_at'] . '</td>';
+        echo '<td>
+                <a href="deleteData.php?id=' . $row['media_id'] . '">Delete</a>
+                <a href="#" class="modify-link" data-id="' . $row['media_id'] . '">Modify</a>   
+              </td>';
         echo '</tr>';
     }
 } catch (PDOException $e) {

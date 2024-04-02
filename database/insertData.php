@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $STH->execute($data);
             header('Location: index.php?success=Item added');
         } catch (PDOException $e){
-            echo "Could not insert data into the database.". $e->getMessage();
+            echo "Could not insert data into the database.";
             file_put_contents('PDOErrors.txt', 'insertData.php - ' . $e->getMessage(), FILE_APPEND);
         }
     }

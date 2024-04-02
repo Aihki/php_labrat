@@ -6,14 +6,16 @@
           content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="js/main.js" defer></script>
 </head>
 <body>
 <?php
 if (isset($_GET['success'])):
     ?>
-    <aside>
+    <dialog id="success-modal">
+        <p><a href="#" class="close-modal">Close</a></p>
         <p><?php echo $_GET['success']; ?></p>
-    </aside>
+    </dialog>
 <?php
 endif;
 ?>
@@ -44,6 +46,7 @@ endif;
             <th>title</th>
             <th>description</th>
             <th>created_at</th>
+            <th>Options</th>
         </tr>
         </thead>
         <tbody>
@@ -51,5 +54,11 @@ endif;
         </tbody>
     </table>
 </section>
+<dialog id="modify-modal">
+    <p><a href="#" class="close-modal">Close</a></p>
+    <div id="modify-content">
+
+    </div>
+</dialog>
 </body>
 </html>
