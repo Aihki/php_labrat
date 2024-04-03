@@ -11,7 +11,7 @@ try {
         echo '<tr>';
         echo '<td>' . $row['media_id'] . '</td>';
         echo '<td>' . $row['user_id'] . '</td>';
-        echo '<td><img alt="kuva" src="' . $row['filename'] . '"></td>';
+        echo '<td><img alt="kuva" src="uploads/' . $row['filename'] . '"></td>';
         echo '<td>' . $row['filesize'] . '</td>';
         echo '<td>' . $row['media_type'] . '</td>';
         echo '<td>' . $row['title'] . '</td>';
