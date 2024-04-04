@@ -12,26 +12,6 @@ if (isset($_GET['id'])) {
     $data = [
         'media_id' => $_GET['id'],
     ];
-    //delete file from server
-    $sql = 'SELECT filename FROM MediaItems WHERE media_id = :media_id';
-    try {
-        $STH = $DBH->prepare($sql);
-        $STH->execute($data);
-        $STH->setFetchMode(PDO::FETCH_ASSOC);
-        $row = $STH->fetch();
-        $filename = $row['filename'];
-        $destination = __DIR__ . '/uploads/' . $filename;
-        if (!unlink($destination)) {
-            echo "Could not delete file from the server.";
-            $DBH->rollBack();
-            exit;
-        }
-    } catch (PDOException $e) {
-        echo "Could not get filename from the database.";
-        file_put_contents('PDOErrors.txt', 'deleteData.php - ' . $e->getMessage(), FILE_APPEND);
-        $DBH->rollBack();
-        exit;
-    }
 
     //delete likes
     $sql = 'DELETE FROM Likes WHERE media_id = :media_id';
@@ -82,13 +62,40 @@ if (isset($_GET['id'])) {
     };
 
     $data['user_id'] = $_SESSION['user']['user_id'];
+
+    //delete file from server
+    $sql = 'SELECT filename FROM MediaItems WHERE media_id = :media_id  AND user_id = :user_id';
+    try {
+        $STH = $DBH->prepare($sql);
+        $STH->execute($data);
+        $STH->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $STH->fetch();
+        $filename = $row['filename'];
+        $destination = __DIR__ . '/uploads/' . $filename;
+        if (!unlink($destination)) {
+            header('Location: home.php?success=File delete failed');
+            $DBH->rollBack();
+            exit;
+        }
+    } catch (PDOException $e) {
+        echo "Could not get filename from the database.";
+        file_put_contents('PDOErrors.txt', 'deleteData.php - ' . $e->getMessage(), FILE_APPEND);
+        $DBH->rollBack();
+        exit;
+    }
+
     //delete mediaItems
     $sql = 'DELETE FROM MediaItems WHERE media_id = :media_id AND user_id = :user_id';
     try {
         $STH = $DBH->prepare($sql);
         $STH->execute($data);
         $DBH->commit();
+        if($STH->rowCount() == 0){
+            echo "You do not have permission to delete this item.";
+            exit;
+        }
         header('Location: home.php?success=Item deleted');
+
     } catch (PDOException $e) {
         echo "Could not delete data from the database.";
         file_put_contents('PDOErrors.txt', 'deleteData.php - ' . $e->getMessage(), FILE_APPEND);
